@@ -2,35 +2,24 @@ import * as React from "react";
 // import { createRoot } from "react-dom/client";
 import {
     createBrowserRouter,
-    // RouterProvider,
+    RouterProvider,
     // Route,
     Link,
 } from "react-router-dom";
-import App from "../App";
 import Users from "../pages/Users";
 import Tasks from "../pages/Tasks";
 import Projects from "../pages/Projects";
+import Home from "../pages/Home";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: (
-            <div>
-                <h1>Hello World</h1>
-                <Link to="about">About Us</Link>
-                <br />
-                <Link to="users">Users</Link>
-                <br />
-                <Link to="tasks">Tasks</Link>
-                <br />
-                <Link to="projects">Projects</Link>
-            </div>
-        ),
+        element: <Home />
     },
-    {
-        path: "about",
-        element: <App />,
-    },
+    // {
+    //     path: "about",
+    //     element: <App />,
+    // },
     {
         path: "users",
         element: <Users />,
@@ -45,4 +34,12 @@ const router = createBrowserRouter([
     },
 ]);
 
-export default router;
+const Router = () => {
+    return (
+        <div>
+            <RouterProvider router={router} />
+        </div>
+    );
+}
+
+export default Router;
