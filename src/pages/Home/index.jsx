@@ -6,7 +6,7 @@ const Home = () => {
         <>
             <Sidebar />
             <div className='home h-screen w-screen'>
-                <div className="flex flex-col justify-center items-center h-screen w-[90%] ml-auto">
+                <div className="flex flex-col justify-center items-center h-screen w-screen">
                     <h1 className="text-4xl font-bold mb-6">¡Hello, World!</h1>
                     <div className='flex flex-col'>
                         <Link to="/login" className='text-blue-600 hover:text-blue-800'>Login</Link>

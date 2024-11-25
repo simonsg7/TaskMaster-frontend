@@ -1,6 +1,7 @@
-import './Sidebar.scss';
+import 'primeicons/primeicons.css';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/Captura_de_pantalla_2024-11-15_093948-removebg-preview.png'
+import './Sidebar.scss';
 
 const Sidebar = () => {
     return (
@@ -9,9 +10,9 @@ const Sidebar = () => {
                 <img src={ logo } alt="Logo" className='h-[4rem] w-auto' />
             </div>
             <div className='container-links mt-[15rem]'>
-                <Link to="/users" className="mb-3">Users</Link>
-                <Link to="/tasks" className="mb-3">Tasks</Link>
-                <Link to="/projects" className="mb-3">Projects</Link>
+                <Link to="/users" className="mb-7 pi pi-user text-[1.8rem] text-tertiary-light"></Link>
+                <Link to="/projects" className="mb-7 pi pi-briefcase text-[1.8rem] text-tertiary-light"></Link>
+                <Link to="/tasks" className="mb-7 pi pi-book text-[1.8rem] text-tertiary-light"></Link>
             </div>
         </div>
     );
