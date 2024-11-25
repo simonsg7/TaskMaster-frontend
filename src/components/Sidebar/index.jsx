@@ -5,7 +5,7 @@ import './Sidebar.scss';
 
 const Sidebar = () => {
     return (
-        <div className='container-sidebar bg-primary text-tertiary-light'>
+        <div className='sidebar-content bg-primary text-tertiary-light'>
             <div className='mt-[0.7rem] flex justify-center'>
                 <img src={ logo } alt="Logo" className='h-[4rem] w-auto' />
             </div>
@@ -15,6 +15,7 @@ const Sidebar = () => {
                 <Link to="/tasks" className="pi pi-book text-[1.8rem] hover:bg-secondary-light hover:text-primary"></Link>
             </div>
         </div>
+
     );
 }
 
