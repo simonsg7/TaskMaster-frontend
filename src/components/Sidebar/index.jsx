@@ -6,13 +6,13 @@ import './Sidebar.scss';
 const Sidebar = () => {
     return (
         <div className='container-sidebar bg-primary text-tertiary-light'>
-            <div className='flex justify-center'>
+            <div className='mt-[0.7rem] flex justify-center'>
                 <img src={ logo } alt="Logo" className='h-[4rem] w-auto' />
             </div>
             <div className='container-links mt-[15rem]'>
-                <Link to="/users" className="mb-7 pi pi-user text-[1.8rem] text-tertiary-light"></Link>
-                <Link to="/projects" className="mb-7 pi pi-briefcase text-[1.8rem] text-tertiary-light"></Link>
-                <Link to="/tasks" className="mb-7 pi pi-book text-[1.8rem] text-tertiary-light"></Link>
+                <Link to="/users" className="pi pi-user text-[1.8rem] hover:bg-secondary-light hover:text-primary"></Link>
+                <Link to="/projects" className="pi pi-briefcase text-[1.8rem] hover:bg-secondary-light hover:text-primary"></Link>
+                <Link to="/tasks" className="pi pi-book text-[1.8rem] hover:bg-secondary-light hover:text-primary"></Link>
             </div>
         </div>
     );
