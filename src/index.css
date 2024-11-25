@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 1 rem;
+    color: var(--tertiary);
+    overflow: hidden;
+}
+
+/* :root {
+    --primary: #335D70,
+    --primary-light: #3B7894,
+    --secondary: #D6B56E,
+    --secondary-light: #D9BD7D,
+    --tertiary: #C8C6C6,
+    --tertiary-light: #F4F3F3,
+} */

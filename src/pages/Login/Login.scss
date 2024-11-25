@@ -1,0 +1,17 @@
+.login-container {
+    height: 100vh;
+    width: 100vw;
+
+    .logo-container {
+        height: 55%;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .inferior-div {
+        height: 45%;
+        width: 100vw;
+    }
+}
