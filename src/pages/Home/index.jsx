@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
+import Header from '../../components/Header';
 
 const Home = () => {
     return (
         <>
+            <Header />
             <Sidebar />
             <div className='home h-screen w-screen'>
                 <div className="flex flex-col justify-center items-center h-screen w-screen">

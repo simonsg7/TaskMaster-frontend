@@ -10,34 +10,40 @@ import Tasks from "../pages/Tasks";
 import Projects from "../pages/Projects";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import AdminLayout from "../pages/Admin";
 
 const router = createBrowserRouter([
     {
-        path: "/",
-        element: <Home />
-    },
-    {
-        path: "login",
-        element: <Login />,
-    },
-    {
-        path: "users",
-        element: <Users />,
-    },
-    {
-        path: "tasks",
-        element: <Tasks />,
-    },
-    {
-        path: "projects",
-        element: <Projects />,
+        element: <AdminLayout />,
+        children: [
+            {
+                path: "/",
+                element: <Home />
+            },
+            {
+                path: "login",
+                element: <Login />,
+            },
+            {
+                path: "users",
+                element: <Users />,
+            },
+            {
+                path: "tasks",
+                element: <Tasks />,
+            },
+            {
+                path: "projects",
+                element: <Projects />,
+            },
+        ],
     },
 ]);
 
 const Router = () => {
     return (
         <div>
-            <RouterProvider router={router} />
+            <RouterProvider router={ router } />
         </div>
     );
 }
