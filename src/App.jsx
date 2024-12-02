@@ -1,6 +1,7 @@
-// import { useState } from 'react'
-import './App.css'
 import Router from './routes/router';
+import 'primereact/resources/themes/saga-blue/theme.css'; // Puedes elegir otro tema
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 const App = () => {
     return (

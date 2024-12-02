@@ -1,4 +1,3 @@
-import 'primeicons/primeicons.css';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/Captura_de_pantalla_2024-11-15_093948-removebg-preview.png'
 import './Sidebar.scss';

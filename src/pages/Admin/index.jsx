@@ -12,9 +12,9 @@ const AdminLayout = () => {
             </div>
             <div className='main-content'>
                 <div className='header'>
-                <Header />,
+                    <Header />,
                 </div>
-                <Outlet />
+                    <Outlet />
                 <div className='footer'>
                     <Footer />
                 </div>
