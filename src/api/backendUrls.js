@@ -1,0 +1,1 @@
+export const urlLogin = 'http://localHost:3000/auth/login';

@@ -18,6 +18,8 @@ export default {
                 // Tertiary color
                 "tertiary-light": "#F4F3F3",
                 "tertiary": "#C8C6C6",
+
+                "bgInput": "#cacaca50"
                 }
         },
     },
