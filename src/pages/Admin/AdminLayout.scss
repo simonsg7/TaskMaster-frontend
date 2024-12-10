@@ -1,4 +1,18 @@
 .admin-content {
-    height: 100vh;
-    width: 100vw;
+    display: flex;
+
+    .sidebar {
+        width: 5.625rem;
+        box-shadow: 2px 0 5px #424242;
+        z-index: 1;
+    }
+    
+    .main-content {
+        height: 100vh;
+        
+        .header {
+            width: 100%;
+            box-shadow: 1px 0 5px #424242;
+        }
+    }
 }

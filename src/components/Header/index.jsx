@@ -4,8 +4,8 @@ import './Header.scss';
 const Header = () => {
     return (
         <header className="header-content bg-tertiary-light text-black flex items-center">
-            <div className="logo-container ml-[7rem]">
-                <img src={ logo } alt="TaskMaster" className='h-[3.5rem] w-auto mb-[0.2rem]' />
+            <div className="logo-container">
+                <img src={ logo } alt="TaskMaster" className='h-[3.5rem] w-auto mb-[0.2rem] ml-[0.8rem]' />
             </div>
         </header>
     );

@@ -1,10 +1,4 @@
-// import { createRoot } from "react-dom/client";
-import {
-    createBrowserRouter,
-    RouterProvider,
-    // Route,
-    // Link,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Users from "../pages/Users";
 import Tasks from "../pages/Tasks";
 import Projects from "../pages/Projects";
