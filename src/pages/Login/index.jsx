@@ -14,8 +14,9 @@ const Login = () => {
     const onSubmit = async (data) => {
         try {
             const response = await axios.post(urlLogin, data);
-            console.log(response.data);
-            localStorage.setItem("Token", (response.data.token));
+            console.log(response);
+            localStorage.setItem("token", (response.data.token));
+            localStorage.setItem("userEmail", (response.data.user.email));
         } catch (error) {
             const errorResponse = handleApiErrors(error);
             console.error("Error during login:", errorResponse.message);
