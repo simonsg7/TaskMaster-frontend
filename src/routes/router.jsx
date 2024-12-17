@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Users from "../pages/Users";
-import Tasks from "../pages/Tasks";
-import Projects from "../pages/Projects";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
+import Users from "../pages/Admin/Users";
+import Tasks from "../pages/Admin/Tasks";
+import Projects from "../pages/Admin/Projects";
+import Home from "../pages/Admin/Home";
+import Login from "../pages/Auth/Login";
 import AdminLayout from "../pages/Admin";
 
 const router = createBrowserRouter([

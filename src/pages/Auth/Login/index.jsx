@@ -4,9 +4,9 @@ import { Button } from 'primereact/button';
 import axios from 'axios';
 
 import './Login.scss';
-import logo from '../../assets/Captura_de_pantalla_2024-11-15_093642-removebg-preview.png';
-import { urlLogin } from "../../api/backendUrls";
-import { handleApiErrors } from "../../api/handleApiErrors";
+import logo from '../../../assets/Captura_de_pantalla_2024-11-15_093642-removebg-preview.png';
+import { urlLogin } from "../../../api/backendUrls";
+import { handleApiErrors } from "../../../api/handleApiErrors";
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
