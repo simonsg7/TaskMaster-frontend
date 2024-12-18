@@ -15,7 +15,7 @@ const GetAllUsers = () => {
         const fetchUsers = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const userEmail = localStorage.getItem('userEmail');
+                const userId = localStorage.getItem('userId');
                 
                 const response = await axios.get(urlGetAllUsers, {
                     headers: {
@@ -24,8 +24,8 @@ const GetAllUsers = () => {
                 });
 
                 if (response.data.ok) {
-                    const usersWithoutUserEmail = response.data.response.filter(user => user.email !== userEmail);
-                    setUsers(usersWithoutUserEmail);
+                    const usersWithoutMyUser = response.data.response.filter(user => user.id !== userId);
+                    setUsers(usersWithoutMyUser);
                 } else {
                     alert('Error al obtener usuarios');
                 }

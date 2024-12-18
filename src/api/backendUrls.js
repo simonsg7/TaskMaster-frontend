@@ -1,2 +1,7 @@
-export const urlLogin = 'http://localHost:3000/auth/login';
-export const urlGetAllUsers = 'http://localHost:3000/users/all';
+const baseUrl = 'http://localHost:3000';
+
+const userId = localStorage.getItem('userId');
+
+export const urlLogin = `${baseUrl}/auth/login`;
+export const urlGetAllUsers = `${baseUrl}/users/all`;
+export const urlMyProfile = `${baseUrl}/users/byid/${userId}`;
