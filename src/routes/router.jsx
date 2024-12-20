@@ -5,6 +5,7 @@ import Projects from "../pages/Admin/Projects";
 import Home from "../pages/Admin/Home";
 import Login from "../pages/Auth/Login";
 import AdminLayout from "../pages/Admin";
+import UserProfile from "../pages/MyProfile";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
             {
                 path: "projects",
                 element: <Projects />,
+            },
+            {
+                path: "profile",
+                element: <UserProfile />,
             },
         ],
     },
