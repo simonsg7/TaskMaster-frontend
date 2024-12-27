@@ -3,15 +3,13 @@ import axios from 'axios';
 
 import { urlMyProfile } from '../../api/backendUrls';
 import { handleApiErrors } from '../../api/handleApiErrors';
+import UploadUserImage from '../../components/UploaduserImage';
 
 const UserProfile = () => {    
     const [userProfile, setUserProfile] = useState(null);
     // const [loading, setLoading] = useState(true);
 
-    console.log("User Profile component mounted");
-
     useEffect(() => {
-        console.log("Fetching user profile...");
         const fetchUserProfile = async () => {
             try {
                 const token = localStorage.getItem('token');
@@ -49,6 +47,7 @@ const UserProfile = () => {
 
     return (
         <div>
+            <UploadUserImage />
             <h2>My Profile!</h2>
             {userProfile ? (
                 <div>
