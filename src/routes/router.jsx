@@ -5,7 +5,7 @@ import Projects from "../pages/Admin/Projects";
 import Home from "../pages/Admin/Home";
 import Login from "../pages/Auth/Login";
 import AdminLayout from "../pages/Admin";
-import UserProfile from "../pages/MyProfile";
+import UserProfile from "../pages/UserProfile";
 
 const router = createBrowserRouter([
     {

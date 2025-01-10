@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { urlMyProfile } from '../../api/backendUrls';
 import { handleApiErrors } from '../../api/handleApiErrors';
-import UploadUserImage from '../../components/UploaduserImage';
+import UserImage from '../../components/UserImage';
 
 const UserProfile = () => {    
     const [userProfile, setUserProfile] = useState(null);
@@ -14,6 +14,8 @@ const UserProfile = () => {
             try {
                 const token = localStorage.getItem('token');
                 const userId = localStorage.getItem('userId');
+                const imageUrl = localStorage.getItem('imageUrl');
+
                 const urlProfile = urlMyProfile(userId);
                 
                 const response = await axios.get(urlProfile, {
@@ -47,7 +49,6 @@ const UserProfile = () => {
 
     return (
         <div>
-            <UploadUserImage />
             <h2>My Profile!</h2>
             {userProfile ? (
                 <div>
@@ -57,6 +58,7 @@ const UserProfile = () => {
             ) : (
                 <p>No profile data available.</p>
             )}
+            <UserImage />
         </div>
     );
 }

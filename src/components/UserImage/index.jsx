@@ -1,16 +1,13 @@
 import React from 'react';
+import { AdvancedImage } from '@cloudinary/react';
+import cld from '../../../cloudinaryConfig';
 
 const UserImage = () => {
+    const defaultImage = cld.image('defaultImage');
+
     return (
-        <div>
-            <h2>Sube tu imagen de perfil</h2>
-            <button onClick={() => uploadWidget.open()}>Cargar Imagen</button>
-            {imageUrl && (
-                <div>
-                    <h3>Imagen de Perfil:</h3>
-                    <img src={imageUrl} alt="Imagen de perfil" style={{ width: '200px', height: '200px', borderRadius: '50%' }} />
-                </div>
-            )}
+        <div className="flex justify-center items-center p-[1.5rem]">
+            <AdvancedImage cldImg={defaultImage} alt="Default Image" className="object-cover h-[32rem] w-[32rem] rounded-full" />
         </div>
     );
 };
