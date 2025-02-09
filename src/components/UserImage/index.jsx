@@ -2,14 +2,30 @@ import React from 'react';
 import { AdvancedImage } from '@cloudinary/react';
 import cld from '../../../cloudinaryConfig';
 
-const UserImage = () => {
-    const defaultImage = cld.image('defaultImage');
+const UserImage = ({ className }) => {
+    const imageUrl = localStorage.getItem('imageUrl');
 
-    return (
-        <div className="flex justify-center items-center p-[1.5rem]">
-            <AdvancedImage cldImg={defaultImage} alt="Default Image" className="object-cover h-[32rem] w-[32rem] rounded-full" />
-        </div>
-    );
+    if (imageUrl) {
+        return (
+            <div>
+                <AdvancedImage
+                    cldImg={cld.image(imageUrl)}
+                    alt="User Profile"
+                    className={`${className} object-cover rounded-full m-[1.5rem]`}
+                />
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                <AdvancedImage
+                    cldImg={cld.image('defaultImage')}
+                    alt="Default Image"
+                    className={`${className} object-cover rounded-full m-[1.5rem]`}
+                />
+            </div>
+        );
+    }
 };
 
 export default UserImage;

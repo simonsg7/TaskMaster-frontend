@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 import './Login.scss';
 import logo from '../../../assets/Captura_de_pantalla_2024-11-15_093642-removebg-preview.png';
@@ -10,6 +12,7 @@ import { handleApiErrors } from "../../../api/handleApiErrors";
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         try {
@@ -17,6 +20,7 @@ const Login = () => {
             localStorage.setItem("token", (response.data.token));
             localStorage.setItem("userId", (response.data.user.id));            
             localStorage.setItem("imageUrl", response.data.user.image_url);
+            navigate('/');
         } catch (error) {
             const errorResponse = handleApiErrors(error);
             console.error("Error during login:", errorResponse.message);

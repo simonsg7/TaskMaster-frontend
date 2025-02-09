@@ -4,6 +4,7 @@ import axios from 'axios';
 import { urlMyProfile } from '../../api/backendUrls';
 import { handleApiErrors } from '../../api/handleApiErrors';
 import UserImage from '../../components/UserImage';
+// import UpdateUserImage from '../../components/UpdateUserImage';
 
 const UserProfile = () => {    
     const [userProfile, setUserProfile] = useState(null);
@@ -58,7 +59,8 @@ const UserProfile = () => {
             ) : (
                 <p>No profile data available.</p>
             )}
-            <UserImage />
+            <UserImage className="h-[32rem] w-[32rem]" />
+            {/* <UpdateUserImage /> */}
         </div>
     );
 }
