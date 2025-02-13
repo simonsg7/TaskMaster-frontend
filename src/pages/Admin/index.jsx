@@ -16,7 +16,7 @@ const AdminLayout = () => {
                     <Header />
                 </div>
                 <div className='w-[100%] flex flex-col flex-grow justify-center items-center'>
-                    <div className='w-[100%] flex flex-col flex-grow justify-center items-center'>
+                    <div className='w-[100%] flex flex-col flex-grow justify-center items-center overflow-auto'>
                         <Outlet />
                     </div>
                     <div className='footer h-[2rem] w-[100%] flex justify-center'>
