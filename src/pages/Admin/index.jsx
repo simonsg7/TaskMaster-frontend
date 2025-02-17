@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+
 import './AdminLayout.scss';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
@@ -16,7 +17,7 @@ const AdminLayout = () => {
                     <Header />
                 </div>
                 <div className='w-[100%] flex flex-col flex-grow justify-center items-center'>
-                    <div className='w-[100%] flex flex-col flex-grow justify-center items-center overflow-auto'>
+                    <div className='w-[100%] flex flex-col flex-grow justify-center items-center'>
                         <Outlet />
                     </div>
                     <div className='footer h-[2rem] w-[100%] flex justify-center'>

@@ -11,7 +11,7 @@ const UserImage = ({ className }) => {
                 <AdvancedImage
                     cldImg={cld.image(imageUrl)}
                     alt="User Profile"
-                    className={`${className} object-cover rounded-full m-[1.5rem]`}
+                    className={`${className} object-cover rounded-full`}
                 />
             </div>
         );
@@ -21,7 +21,7 @@ const UserImage = ({ className }) => {
                 <AdvancedImage
                     cldImg={cld.image('defaultImage')}
                     alt="Default Image"
-                    className={`${className} object-cover rounded-full m-[1.5rem]`}
+                    className={`${className} object-cover rounded-full`}
                 />
             </div>
         );

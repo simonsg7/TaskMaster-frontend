@@ -1,14 +1,13 @@
 import { useForm } from "react-hook-form";
 import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
 
 import './Login.scss';
 import logo from '../../../assets/Captura_de_pantalla_2024-11-15_093642-removebg-preview.png';
 import { urlLogin } from "../../../api/backendUrls";
 import { handleApiErrors } from "../../../api/handleApiErrors";
+import Button1 from "../../../components/Button1";
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -47,7 +46,7 @@ const Login = () => {
                         {errors.password && (<span className="text-[0.85rem]">Is required</span>)}
                     </div>
 
-                    <Button className="bg-primary-light text-tertiary-light hover:bg-white hover:text-primary-light w-[7.5rem] p-[0.7rem] mt-[1rem]" label="Login" text raised rounded />
+                    <Button1 className="w-[7.5rem] mt-[1rem]" label="Login" />
                 </form>
             </div>
         </div>
