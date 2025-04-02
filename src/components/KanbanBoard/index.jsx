@@ -7,6 +7,17 @@ import UserImage from '../UserImage';
 import Button1 from '../Button1';
 import handleDragEnd from '../../middlewares/DragAndDrop';
 
+const getBorderClassByPriority = (priority) => {
+    switch (priority?.toLowerCase()) {
+        case 'baja':
+            return 'border-green-500';
+        case 'media':
+            return 'border-yellow-500';
+        case 'alta':
+            return 'border-red-500';
+    }
+};
+
 const KanbanBoard = () => {
     const [board, setBoard] = useState({ title: '', columns: [] });
 
@@ -89,17 +100,17 @@ const KanbanBoard = () => {
     }, []);
 
     return (
-        <div className='h-full w-full p-4'>
+        <div className='h-full w-full p-4 overflow-auto'>
             <h1 className="text-center text-2xl mt-2">{board.title}</h1>
 
             <DragDropContext onDragEnd={(result) => { handleDragEnd(result, setBoard) }}>
-                <div  className="flex justify-center mt-2 border border-green-600">
+                <div  className="flex justify-center mt-2">
                     {
                         board.columns.map(column => (
-                            <Droppable key={column.id} droppableId={column.id} direction='vertical'>
+                            <Droppable key={column.id} droppableId={column.id}>
                                 {
                                     (droppableProvided) => (
-                                        <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef} className="w-[17rem] min-h-[45.5rem] border border-orange-500 rounded-lg bg-tertiary-light m-2 flex flex-col items-center">
+                                        <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef} className="w-[17rem] min-h-[45.5rem] border border-gray-300 rounded-lg bg-tertiary-light m-2 flex flex-col items-center">
                                             <h2 className='text-[1.2rem] font-bold m-2'>{column.title}</h2>
 
                                             {
@@ -107,7 +118,7 @@ const KanbanBoard = () => {
                                                     <Draggable key={card.id} draggableId={card.id} index={index}>
                                                         {
                                                             (draggableProvided) => (
-                                                                <div {...draggableProvided.draggableProps} ref={draggableProvided.innerRef} {...draggableProvided.dragHandleProps} className="h-auto w-[15rem] flex flex-col border border-red-800 bg-white rounded-lg mb-2 p-2">
+                                                                <div {...draggableProvided.draggableProps} ref={draggableProvided.innerRef} {...draggableProvided.dragHandleProps} className={`h-auto w-[15rem] flex flex-col bg-white mb-2 p-2 border ${getBorderClassByPriority(card.priority)} rounded-lg shadow-md duration-200 hover:scale-105`}>
                                                                     <div className='flex justify-between'>
                                                                         <p className='font-bold'>{card.title}</p>
                                                                         <UserImage className='h-[2rem] w-[2rem] mb-[0.4rem]' />
@@ -117,7 +128,7 @@ const KanbanBoard = () => {
                                                                     <p>{card.description}</p>
                                                                     <hr />
                                                                     <p>{card.category}</p>
-                                                                    <p>{card.priority}</p>
+                                                                    {/* <p>{card.priority}</p> */}
                                                                     <div className='border border-gray-400 w-[50%] p-1'><p>{card.expectation_date.split('T')[0]}</p></div>
                                                                 </div>
                                                             )
@@ -125,7 +136,7 @@ const KanbanBoard = () => {
                                                     </Draggable>
                                                 ))
                                             }
-                                            {droppableProvided.placeholder}
+                                            {/* {droppableProvided.placeholder} */}
                                         </div> 
                                     )
                                 }
@@ -135,8 +146,7 @@ const KanbanBoard = () => {
                 </div>
             </DragDropContext>
 
-
-            <Button1 label="Add Task" />
+            <Button1 label="Add Task" className="left-0" />
         </div>
     );
 };
