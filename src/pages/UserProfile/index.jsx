@@ -49,17 +49,25 @@ const UserProfile = () => {
     // }
 
     return (
-        <div>
-            <h2>My Profile!</h2>
-            {userProfile ? (
-                <div>
-                    <p><strong>Name:</strong> {userProfile.users_detail.first_name} {userProfile.users_detail.last_name}</p>
-                    <p><strong>Email:</strong> {userProfile.email}</p>
+        <div className='flex w-full h-full pt-2'>
+            <div className='border border-red-600 px-2 flex flex-col'>
+                <div className='mb-2'>
+                    <UserImage className="h-[13rem] w-[13rem]" />
                 </div>
-            ) : (
-                <p>No profile data available.</p>
-            )}
-            <UserImage className="h-[32rem] w-[32rem]" />
+                <div className='border border-purple-600 flex flex-1 flex-col items-center justify-center'>
+                    <h2>My Profile!</h2>
+                    {userProfile ? (
+                        <div>
+                            <p><strong>Name:</strong> {userProfile.users_detail.first_name} {userProfile.users_detail.last_name}</p>
+                            <p><strong>Email:</strong> {userProfile.email}</p>
+                        </div>
+                    ) : (
+                        <p>No profile data available.</p>
+                    )}
+                </div>
+            </div>
+            <div className='border border-blue-500 p-2 flex-1'>
+            </div>
             {/* <UpdateUserImage /> */}
         </div>
     );
