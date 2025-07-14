@@ -4,8 +4,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { urlProjectsByUserId } from '../../api/backendUrls';
 import UserImage from '../UserImage';
-import Button1 from '../Button1';
 import handleDragEnd from '../../middlewares/DragAndDrop';
+import Modal from '../Modal';
+import FormCreateTask from '../FormCreateTask';
 
 const getBorderClassByPriority = (priority) => {
     switch (priority?.toLowerCase()) {
@@ -26,18 +27,19 @@ const KanbanBoard = () => {
             try {
                 const token = localStorage.getItem('token');
                 const userId = localStorage.getItem('userId');
-
+                
                 const response = await axios.get(urlProjectsByUserId(userId), {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-
+                
                 if (response.status === 200) {
+                    console.log('Response', response);
                     const userDetails = response.data[0];
 
                     if (userDetails && userDetails.projects) {
-                        const project = userDetails.projects[0]; // Assuming we are using the first project
+                        const project = userDetails.projects[1]; // Assuming we are using the first project
                         const columns = [
                             { id: 'todo', title: 'To Do', cards: [] },
                             { id: 'doing', title: 'Doing', cards: [] },
@@ -99,6 +101,7 @@ const KanbanBoard = () => {
         fetchProjectsAndTasks();
     }, []);
 
+
     return (
         <div className='h-full w-full p-4 overflow-auto'>
             <h1 className="text-center text-2xl mt-2">{board.title}</h1>
@@ -146,7 +149,10 @@ const KanbanBoard = () => {
                 </div>
             </DragDropContext>
 
-            <Button1 label="Add Task" className="left-0" />
+
+            <Modal title="Add Task" buttonName="Add Task">
+                <FormCreateTask />
+            </Modal>
         </div>
     );
 };
