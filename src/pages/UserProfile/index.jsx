@@ -4,6 +4,7 @@ import axios from 'axios';
 import { urlMyProfile } from '../../api/backendUrls';
 import { handleApiErrors } from '../../api/handleApiErrors';
 import UserImage from '../../components/UserImage';
+import KanbanBoard from '../../components/KanbanBoard';
 // import UpdateUserImage from '../../components/UpdateUserImage';
 
 const UserProfile = () => {    
@@ -67,6 +68,7 @@ const UserProfile = () => {
                 </div>
             </div>
             <div className='border border-blue-500 p-2 flex-1'>
+                <KanbanBoard />
             </div>
             {/* <UpdateUserImage /> */}
         </div>
