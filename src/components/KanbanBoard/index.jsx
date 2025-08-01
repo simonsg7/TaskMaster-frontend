@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { useQuery } from 'react-query';
 
-import { urlProjectsByUserId } from '../../api/backendUrls';
 import UserImage from '../UserImage';
 import handleDragEnd from '../../middlewares/DragAndDrop';
 import Modal from '../Modal';
 import FormCreateTask from '../FormCreateTask';
+import getProjectsAndTasks from '../../services/GetProjectsAndTasks';
 
 const getBorderClassByPriority = (priority) => {
     switch (priority?.toLowerCase()) {
@@ -19,88 +19,69 @@ const getBorderClassByPriority = (priority) => {
     }
 };
 
+const mapProjectToBoard = (project) => {
+    const columns = [
+        { id: 'todo', title: 'To Do', cards: [] },
+        { id: 'doing', title: 'Doing', cards: [] },
+        { id: 'done', title: 'Done', cards: [] }
+    ];
+
+    project.tasks.forEach(task => {
+        if (task.state) {
+            let columnId;
+            switch (task.state.toLowerCase()) {
+                case 'pendiente':
+                    columnId = 'todo';
+                    break;
+                case 'en progreso':
+                    columnId = 'doing';
+                    break;
+                case 'completa':
+                    columnId = 'done';
+                    break;
+                default:
+                    columnId = null;
+            }
+
+            if (columnId) {
+                const column = columns.find(col => col.id === columnId);
+                if (column) {
+                    column.cards.push({
+                        id: task.id,
+                        title: task.name,
+                        description: task.description,
+                        category: task.category,
+                        priority: task.priority,
+                        expectation_date: task.expectation_date,
+                        user: [task.users_detail.first_name, ' ', task.users_detail.last_name].join('')
+                    });
+                }
+            }
+        }
+    });
+
+    return { title: project.name, columns };
+};
+
 const KanbanBoard = () => {
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['projectsAndTasks'],
+        queryFn: getProjectsAndTasks
+    });
+
     const [board, setBoard] = useState({ title: '', columns: [] });
 
     useEffect(() => {
-        const fetchProjectsAndTasks = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const userId = localStorage.getItem('userId');
-                
-                const response = await axios.get(urlProjectsByUserId(userId), {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                
-                if (response.status === 200) {
-                    console.log('Response', response);
-                    const userDetails = response.data[0];
-
-                    if (userDetails && userDetails.projects) {
-                        const project = userDetails.projects[1]; // Assuming we are using the first project
-                        const columns = [
-                            { id: 'todo', title: 'To Do', cards: [] },
-                            { id: 'doing', title: 'Doing', cards: [] },
-                            { id: 'done', title: 'Done', cards: [] }
-                        ];
-
-                        project.tasks.forEach(task => {
-                            if (task.state) {
-                                let columnId;
-                                switch (task.state.toLowerCase()) {
-                                    case 'pendiente':
-                                        columnId = 'todo';
-                                        break;
-                                    case 'en progreso':
-                                        columnId = 'doing';
-                                        break;
-                                    case 'completa':
-                                        columnId = 'done';
-                                        break;
-                                    // case 'diario':
-                                    //     // Handle 'diario' tasks later
-                                    //     break;
-                                    default:
-                                        columnId = null;
-                                }
-
-                                if (columnId) {
-                                    const column = columns.find(col => col.id === columnId);
-                                    if (column) {
-                                        column.cards.push({
-                                            id: task.id,
-                                            title: task.name,
-                                            description: task.description,
-                                            category: task.category,
-                                            priority: task.priority,
-                                            expectation_date: task.expectation_date,
-                                            user: [task.users_detail.first_name, ' ', task.users_detail.last_name]
-                                        });
-                                    }
-                                }
-                            }
-                        });
-
-                        setBoard({ title: project.name, columns });
-
-                    } else {
-                        console.error('Projects data is missing or malformed');
-                        alert('Error al obtener proyectos y tareas');
-                    }
-                } else {
-                    alert('Error al obtener proyectos y tareas');
-                }
-            } catch (error) {
-                console.error("Error", error.message);
-                alert('Error al obtener proyectos y tareas');
-            }
+        if (data && data[0]?.projects) {
+            const project = data[0].projects[1];
+            if (project) {
+                setBoard(mapProjectToBoard(project));
+            };
         };
+    }, [data]);
 
-        fetchProjectsAndTasks();
-    }, []);
-
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error loading projects and tasks</div>;
 
     return (
         <div className='h-full w-full p-4 overflow-auto'>
