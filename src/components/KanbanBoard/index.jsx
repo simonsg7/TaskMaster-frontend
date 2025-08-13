@@ -7,6 +7,7 @@ import handleDragEnd from '../../middlewares/DragAndDrop';
 import Modal from '../Modal';
 import FormCreateTask from '../FormCreateTask';
 import getProjectsAndTasks from '../../services/GetProjectsAndTasks';
+import { getCardsData } from '../../utils/getCardsData';
 
 const getBorderClassByPriority = (priority) => {
     switch (priority?.toLowerCase()) {
@@ -19,69 +20,72 @@ const getBorderClassByPriority = (priority) => {
     }
 };
 
-const mapProjectToBoard = (project) => {
+const mapItemsToBoard = (items, title = '') => {
     const columns = [
         { id: 'todo', title: 'To Do', cards: [] },
         { id: 'doing', title: 'Doing', cards: [] },
         { id: 'done', title: 'Done', cards: [] }
     ];
 
-    project.tasks.forEach(task => {
-        if (task.state) {
-            let columnId;
-            switch (task.state.toLowerCase()) {
-                case 'pendiente':
-                    columnId = 'todo';
-                    break;
-                case 'en progreso':
-                    columnId = 'doing';
-                    break;
-                case 'completa':
-                    columnId = 'done';
-                    break;
-                default:
-                    columnId = null;
-            }
-
-            if (columnId) {
-                const column = columns.find(col => col.id === columnId);
-                if (column) {
-                    column.cards.push({
-                        id: task.id,
-                        title: task.name,
-                        description: task.description,
-                        category: task.category,
-                        priority: task.priority,
-                        expectation_date: task.expectation_date,
-                        user: [task.users_detail.first_name, ' ', task.users_detail.last_name].join('')
-                    });
-                }
+    const cards = getCardsData(items);
+    cards.forEach(item => {
+        let columnId;
+        switch ((item.state || '').toLowerCase()) {
+            case 'pendiente':
+                columnId = 'todo';
+                break;
+            case 'en progreso':
+                columnId = 'doing';
+                break;
+            case 'completa':
+                columnId = 'done';
+                break;
+            default:
+                columnId = null;
+        }
+        if (columnId) {
+            const column = columns.find(col => col.id === columnId);
+            if (column) {
+                column.cards.push(item);
             }
         }
     });
 
-    return { title: project.name, columns };
+    return { title, columns };
 };
 
-const KanbanBoard = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ['projectsAndTasks'],
-        queryFn: getProjectsAndTasks
-    });
+const KanbanBoard = ({ selectedProject, projects }) => {
+    // const { data, isLoading, error } = useQuery({
+    //     queryKey: ['projectsAndTasks'],
+    //     queryFn: getProjectsAndTasks
+    // });
 
     const [board, setBoard] = useState({ title: '', columns: [] });
 
     useEffect(() => {
-        if (data && data[0]?.projects) {
-            const project = data[0].projects[1];
-            if (project) {
-                setBoard(mapProjectToBoard(project));
-            };
-        };
-    }, [data]);
+        // if (isLoading || error) return;
+        
+    //     if (selectedProject) {
+    //         setBoard(mapItemsToBoard(selectedProject.tasks, selectedProject.name));
+    //     } else if (data && data[0]?.projects) {
+    //         setBoard(mapItemsToBoard(data[0].projects, 'My Projects'));
+    //     }
+    // }, [data, selectedProject, isLoading, error]);    
+    
+        // if (isLoading) return <div>Loading...</div>;
+        // if (error) return <div>Error loading projects and tasks</div>;
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading projects and tasks</div>;
+        console.log('Projects in KanbanBoard:', projects);
+        console.log('Selected project:', selectedProject);
+        
+        if (selectedProject) {
+            console.log('Selected project tasks:', selectedProject.tasks);
+            setBoard(mapItemsToBoard(selectedProject.tasks, selectedProject.name));
+        } else if (projects) {
+            console.log('Mapping projects to board:', projects);
+            setBoard(mapItemsToBoard(projects, 'My Projects'));
+        }
+    }, [projects, selectedProject]);
 
     return (
         <div className='h-full w-full p-4 overflow-auto'>
