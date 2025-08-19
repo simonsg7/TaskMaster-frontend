@@ -117,7 +117,7 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                                                                     <hr />
                                                                     <p>{card.category}</p>
                                                                     {/* <p>{card.priority}</p> */}
-                                                                    <div className='border border-gray-400 w-[50%] p-1'><p>{card.expectation_date.split('T')[0]}</p></div>
+                                                                    <div className='border border-gray-400 w-[50%] p-1 mt-[0.5rem]'><p>{card.expectation_date.split('T')[0]}</p></div>
                                                                 </div>
                                                             )
                                                         }

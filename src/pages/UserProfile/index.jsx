@@ -7,6 +7,7 @@ import UserImage from '../../components/UserImage';
 import KanbanBoard from '../../components/KanbanBoard';
 import Modal from '../../components/Modal';
 import getProjectsAndTasks from '../../services/GetProjectsAndTasks';
+import Button1 from '../../components/Button1';
 // import UpdateUserImage from '../../components/UpdateUserImage';
 
 const UserProfile = () => {    
@@ -78,21 +79,25 @@ const UserProfile = () => {
                 <div className='border border-purple-600 flex flex-1 flex-col items-center justify-center'>
                     <h2>My Profile!</h2>
                     <Modal title="Select Project" buttonName="Select Project">
-                        <ul>
-                            {projects.map(project => (
-                                <li key={project.id}>
-                                    <button
-                                        className="bg-blue-500 text-white px-2 py-1 rounded m-1"
+                        {({ close }) => (
+                            <div className="flex flex-col">
+                                <Button1 label="My Projects" className="mt-[1rem] mx-[1rem] mb-[0.3rem]"
+                                    onClick={() => {
+                                        setSelectedProject(null);
+                                        close();
+                                    }}
+                                />
+                                {projects.map(project => (
+                                    <Button1 label={project.name} className='mt-[1rem] mx-[1rem] mb-[0.3rem]' key={project.id}
                                         onClick={() => {
                                             setSelectedProject(project);
                                             console.log('Selected project:', project);
+                                            close();
                                         }}
-                                    >
-                                        {project.name}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </Modal>
                     {userProfile ? (
                         <div>
