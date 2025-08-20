@@ -24,8 +24,9 @@ const GetAllUsers = () => {
                 });
 
                 if (response.data.ok) {
-                    const usersWithoutMyUser = response.data.response.filter(user => user.id !== userId);
-                    setUsers(usersWithoutMyUser);
+                    // const usersWithoutMyUser = response.data.response.filter(user => user.id !== userId);
+                    // setUsers(usersWithoutMyUser);
+                    setUsers(response.data.response);
                 } else {
                     alert('Error al obtener usuarios');
                 }
@@ -60,8 +61,13 @@ const GetAllUsers = () => {
                 <div className='bg-white w-[100%] h-[100%] flex justify-center items-center mt-[4rem] py-[1.5rem] rounded-[1rem]'>
                     <DataTable value={ users } stripedRows tableStyle={{ minWidth: '30rem', minHeight: '20rem' }} className='w-[90%]'>
                         <Column 
+                            header="Id"
+                            field="id"
+                            headerStyle={{ padding: '0.7rem' }}
+                        ></Column>
+                        <Column 
                             header="Name" 
-                            body={ (rowData) => userName(rowData) }
+                            body={ (usuario) => userName(usuario) }
                             headerStyle={{ padding: '0.7rem' }}
                         ></Column>
                         <Column 
