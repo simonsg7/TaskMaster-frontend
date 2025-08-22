@@ -4,14 +4,16 @@ import axios from 'axios';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
-        
+import { useMutation, useQueryClient } from 'react-query';
 
 import { urlCreateTask } from '../../api/backendUrls';
 import { handleApiErrors } from '../../api/handleApiErrors';
 import Button1 from '../Button1';
 
-const FormCreateTask = () => {
+const FormCreateTask = ({ selectedProject, close }) => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const queryClient = useQueryClient();
+
     const [selectedCategory, setSelectedCategory] = useState(null);
     
     const categories = [
@@ -41,22 +43,39 @@ const FormCreateTask = () => {
         { label: 'Done', value: 'completa' },
     ];
 
-    const onSubmit = async (data) => {
-        try {
+    const mutation = useMutation(
+        async (data) => {
             const token = localStorage.getItem('token');
-            const response = await axios.post(urlCreateTask, data, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+            const userDetailId = localStorage.getItem('userDetailId');
+
+            console.log("selectedProject en submit:", selectedProject);
+
+            const payload = {
+                ...data,
+                user_detail_id: userDetailId,
+                project_id: selectedProject?.id,
+            };
+
+            const response = await axios.post(urlCreateTask, payload, {
+                headers: { Authorization: `Bearer ${token}` }
             });
 
-            if (response.status === 201) {
-                console.log("Task created successfully:", response.data);
+            return response.data;
+        },
+        {
+            onSuccess: (data) => {
+                queryClient.invalidateQueries('projectsAndTasks');
+                if (close) close();
+            },
+            onError: (error) => {
+                handleApiErrors(error);
+                console.error("Error creating task:", error.message);
             }
-        } catch (error) {
-            handleApiErrors(error);
-            console.error("Error creating task:", error.message);
         }
+    );
+
+    const onSubmit = (data) => {
+        mutation.mutate(data);
     };
 
     return (
