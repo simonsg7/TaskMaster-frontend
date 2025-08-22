@@ -1,16 +1,6 @@
 import { Link } from 'react-router-dom';
-import Modal from '../../../components/Modal';
 
 const Home = () => {
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // const handleOpenModal = () => {
-    //     setIsModalOpen(true);
-    // };
-
-    // const handleCloseModal = () => {
-    //     setIsModalOpen(false);
-    // };
 
     return (
         <>
@@ -21,16 +11,6 @@ const Home = () => {
                 <Link to="tasks" className='text-blue-600 hover:text-blue-800'>Tasks</Link>
                 <Link to="projects" className='text-blue-600 hover:text-blue-800'>Projects</Link>
             </div>
-
-            <Modal title="Modal Prueba" buttonName="Abrir Modal">
-                <p>Este es un modal vacío. Aquí puedes agregar un formulario o contenido dinámico.</p>
-            </Modal>
-
-            {/* <Button label='Modal' onClick={handleOpenModal} />
-
-            <Modal open={isModalOpen} close={handleCloseModal} title="Add Task">
-                <p>Este es un modal vacío. Aquí puedes agregar un formulario o contenido dinámico.</p>
-            </Modal> */}
         </>
     );
 }

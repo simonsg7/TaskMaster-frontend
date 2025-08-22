@@ -17,8 +17,10 @@ const Login = () => {
         try {
             const response = await axios.post(urlLogin, data);
             localStorage.setItem("token", (response.data.token));
-            localStorage.setItem("userId", (response.data.user.id));            
+            localStorage.setItem("userId", (response.data.user.id));         
+            localStorage.setItem("userDetailId", (response.data.user.user_detail_id));         
             localStorage.setItem("imageUrl", response.data.user.image_url);
+            console.log(response);
             navigate('/');
         } catch (error) {
             const errorResponse = handleApiErrors(error);
