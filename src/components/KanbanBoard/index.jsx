@@ -136,7 +136,11 @@ const KanbanBoard = ({ selectedProject, projects }) => {
 
 
             <Modal title="Add Task" buttonName="Add Task">
-                <FormCreateTask />
+                {
+                    ({ close }) => (
+                        <FormCreateTask selectedProject={selectedProject} close={close} />
+                    )
+                }
             </Modal>
         </div>
     );

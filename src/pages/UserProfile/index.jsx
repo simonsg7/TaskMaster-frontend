@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useQuery } from 'react-query';
 
 import { urlMyProfile } from '../../api/backendUrls';
 import { handleApiErrors } from '../../api/handleApiErrors';
@@ -12,10 +13,11 @@ import Button1 from '../../components/Button1';
 
 const UserProfile = () => {    
     const [userProfile, setUserProfile] = useState(null);
-    const [projects, setProjects] = useState([]);
-    const [tasks, setTasks] = useState([]);
+    // const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     // const [loading, setLoading] = useState(true);
+
+    const { data } = useQuery('projectsAndTasks', getProjectsAndTasks);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -47,28 +49,36 @@ const UserProfile = () => {
             }
         };
 
-        const fetchProjectsAndTasks = async () => {
-            try {
-                const data = await getProjectsAndTasks();
-                console.log('DATA DE API', data);
-                const userData = Array.isArray(data) ? data[0] : data;
-                console.log('USER DATA', userData);
-                
-                setProjects(userData.projects || []);
-                console.log('Projects set in UserProfile:', userData.projects);
-                setTasks(userData.tasks || []);
-            } catch (error) {
-                console.error('Error al obtener proyectos y tareas', error);
-            }
-        };
+        // const fetchProjectsAndTasks = async () => {
+        //     try {
+        //         const data = await getProjectsAndTasks();
+        //         console.log('DATA DE API', data);
+        //         const userData = Array.isArray(data) ? data[0] : data;
+        //         console.log('USER DATA', userData);
+
+        //         setProjects(userData.projects || []);
+        //         console.log('Projects set in UserProfile:', userData.projects);
+        //     } catch (error) {
+        //         console.error('Error al obtener proyectos y tareas', error);
+        //     }
+        // };
 
         fetchUserProfile();
-        fetchProjectsAndTasks();
+        // fetchProjectsAndTasks();
     }, []);
 
     // if (loading) {
     //     return <div>Loading...</div>;
     // }
+
+    const projects = data ? (Array.isArray(data) ? data[0]?.projects : data.projects) : [];
+
+    useEffect(() => {
+        if (selectedProject && projects.length > 0) {
+            const updated = projects.find(p => p.id === selectedProject.id);
+            if (updated) setSelectedProject(updated);
+        }
+    }, [projects]);
 
     return (
         <div className='flex w-full h-full pt-2'>
@@ -87,7 +97,7 @@ const UserProfile = () => {
                                         close();
                                     }}
                                 />
-                                {projects.map(project => (
+                                {projects && projects.map(project => (
                                     <Button1 label={project.name} className='mt-[1rem] mx-[1rem] mb-[0.3rem]' key={project.id}
                                         onClick={() => {
                                             setSelectedProject(project);
