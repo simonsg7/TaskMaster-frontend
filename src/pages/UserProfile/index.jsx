@@ -7,15 +7,12 @@ import { handleApiErrors } from '../../api/handleApiErrors';
 import UserImage from '../../components/UserImage';
 import KanbanBoard from '../../components/KanbanBoard';
 import Modal from '../../components/Modal';
-import getProjectsAndTasks from '../../services/GetProjectsAndTasks';
+import getProjectsAndTasks from '../../services/Projects/GetProjectsAndTasks';
 import Button1 from '../../components/Button1';
-// import UpdateUserImage from '../../components/UpdateUserImage';
 
 const UserProfile = () => {    
     const [userProfile, setUserProfile] = useState(null);
-    // const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
-    // const [loading, setLoading] = useState(true);
 
     const { data } = useQuery('projectsAndTasks', getProjectsAndTasks);
 
@@ -24,7 +21,6 @@ const UserProfile = () => {
             try {
                 const token = localStorage.getItem('token');
                 const userId = localStorage.getItem('userId');
-                // const imageUrl = localStorage.getItem('imageUrl');
                 const urlProfile = urlMyProfile(userId);
                 
                 const response = await axios.get(urlProfile, {
@@ -43,33 +39,11 @@ const UserProfile = () => {
                 const errorResponse = handleApiErrors(error);
                 console.error("Error", errorResponse.message);
                 alert(errorResponse.message);
-                
-            // } finally {
-            //     setLoading(false);
             }
         };
 
-        // const fetchProjectsAndTasks = async () => {
-        //     try {
-        //         const data = await getProjectsAndTasks();
-        //         console.log('DATA DE API', data);
-        //         const userData = Array.isArray(data) ? data[0] : data;
-        //         console.log('USER DATA', userData);
-
-        //         setProjects(userData.projects || []);
-        //         console.log('Projects set in UserProfile:', userData.projects);
-        //     } catch (error) {
-        //         console.error('Error al obtener proyectos y tareas', error);
-        //     }
-        // };
-
         fetchUserProfile();
-        // fetchProjectsAndTasks();
     }, []);
-
-    // if (loading) {
-    //     return <div>Loading...</div>;
-    // }
 
     const projects = data ? (Array.isArray(data) ? data[0]?.projects : data.projects) : [];
 

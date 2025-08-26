@@ -80,7 +80,6 @@ const FormCreateTask = ({ selectedProject, close }) => {
 
     return (
         <>
-        {/* name, category (trabajo, personal, estudio, finanzas, salud y bienestar, viajes, hogar, social), description, priority(baja, media, alta), expectation_date, state(diario, pendiente, en progreso, completa) */}
             <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col items-center justify-center'>
                 <div className='p-2'>
                     <InputText {...register("name", {required: true})} type="text" className="w-[12rem] p-[0.3rem] border border-blue-300 hover:bg-bgInput mr-4" placeholder="Task Name"  />

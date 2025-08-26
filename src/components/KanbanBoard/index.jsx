@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { useQuery } from 'react-query';
 
 import UserImage from '../UserImage';
 import handleDragEnd from '../../middlewares/DragAndDrop';
 import Modal from '../Modal';
 import FormCreateTask from '../FormCreateTask';
-import getProjectsAndTasks from '../../services/GetProjectsAndTasks';
 import { getCardsData } from '../../utils/getCardsData';
+import deleteTask from '../../services/Tasks/deleteTasks';
+import { useMutation, useQueryClient } from 'react-query';
 
 const getBorderClassByPriority = (priority) => {
     switch (priority?.toLowerCase()) {
@@ -55,26 +55,10 @@ const mapItemsToBoard = (items, title = '') => {
 };
 
 const KanbanBoard = ({ selectedProject, projects }) => {
-    // const { data, isLoading, error } = useQuery({
-    //     queryKey: ['projectsAndTasks'],
-    //     queryFn: getProjectsAndTasks
-    // });
 
     const [board, setBoard] = useState({ title: '', columns: [] });
 
     useEffect(() => {
-        // if (isLoading || error) return;
-        
-    //     if (selectedProject) {
-    //         setBoard(mapItemsToBoard(selectedProject.tasks, selectedProject.name));
-    //     } else if (data && data[0]?.projects) {
-    //         setBoard(mapItemsToBoard(data[0].projects, 'My Projects'));
-    //     }
-    // }, [data, selectedProject, isLoading, error]);    
-    
-        // if (isLoading) return <div>Loading...</div>;
-        // if (error) return <div>Error loading projects and tasks</div>;
-
         console.log('Projects in KanbanBoard:', projects);
         console.log('Selected project:', selectedProject);
         
@@ -86,6 +70,9 @@ const KanbanBoard = ({ selectedProject, projects }) => {
             setBoard(mapItemsToBoard(projects, 'My Projects'));
         }
     }, [projects, selectedProject]);
+
+    const queryClient = useQueryClient();
+    const { mutate: deleteTaskMutate } = useMutation(deleteTask, { onSuccess: () => queryClient.invalidateQueries('projectsAndTasks') })
 
     return (
         <div className='h-full w-full p-4 overflow-auto'>
@@ -106,7 +93,7 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                                                     <Draggable key={card.id} draggableId={card.id} index={index}>
                                                         {
                                                             (draggableProvided) => (
-                                                                <div {...draggableProvided.draggableProps} ref={draggableProvided.innerRef} {...draggableProvided.dragHandleProps} className={`h-auto w-[15rem] flex flex-col bg-white mb-2 p-2 border ${getBorderClassByPriority(card.priority)} rounded-lg shadow-md duration-200 hover:scale-105`}>
+                                                                <div {...draggableProvided.draggableProps} ref={draggableProvided.innerRef} {...draggableProvided.dragHandleProps} className={`h-auto w-[15rem] flex flex-col bg-white mb-2 p-2 border-[0.14rem] ${getBorderClassByPriority(card.priority)} rounded-lg shadow-md duration-200 hover:scale-105`}>
                                                                     <div className='flex justify-between'>
                                                                         <p className='font-bold'>{card.title}</p>
                                                                         <UserImage className='h-[2rem] w-[2rem] mb-[0.4rem]' />
@@ -116,8 +103,10 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                                                                     <p>{card.description}</p>
                                                                     <hr />
                                                                     <p>{card.category}</p>
-                                                                    {/* <p>{card.priority}</p> */}
-                                                                    <div className='border border-gray-400 w-[50%] p-1 mt-[0.5rem]'><p>{card.expectation_date.split('T')[0]}</p></div>
+                                                                    <div className='flex justify-between items-center'>
+                                                                        <div className='border border-gray-400 w-[50%] p-1 mt-[0.5rem]'><p>{card.expectation_date.split('T')[0]}</p></div>
+                                                                        <button title='Delete' onClick={() => deleteTaskMutate(card.id)} className='pi pi-trash text-[1.1rem] pt-5 opacity-40'></button>
+                                                                    </div>
                                                                 </div>
                                                             )
                                                         }
