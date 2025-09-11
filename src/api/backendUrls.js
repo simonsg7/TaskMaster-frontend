@@ -10,3 +10,4 @@ export const urlProjectsByUserId = (userId) => `${baseUrl}/projects/projectsbyus
 export const urlTaskById = (taskId) => `${baseUrl}/tasks/update/${taskId}`;
 export const urlCreateTask = `${baseUrl}/tasks/create`;
 export const urlDeleteTask = (taskId) => `${baseUrl}/tasks/delete/${taskId}`;
+export const urlUpdateTask = (taskId) => `${baseUrl}/tasks/update/${taskId}`;

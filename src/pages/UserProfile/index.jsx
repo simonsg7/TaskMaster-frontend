@@ -13,6 +13,7 @@ import Button1 from '../../components/Button1';
 const UserProfile = () => {    
     const [userProfile, setUserProfile] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const { data } = useQuery('projectsAndTasks', getProjectsAndTasks);
 
@@ -62,27 +63,28 @@ const UserProfile = () => {
                 </div>
                 <div className='border border-purple-600 flex flex-1 flex-col items-center justify-center'>
                     <h2>My Profile!</h2>
-                    <Modal title="Select Project" buttonName="Select Project">
-                        {({ close }) => (
-                            <div className="flex flex-col">
-                                <Button1 label="My Projects" className="mt-[1rem] mx-[1rem] mb-[0.3rem]"
-                                    onClick={() => {
-                                        setSelectedProject(null);
-                                        close();
-                                    }}
-                                />
-                                {projects && projects.map(project => (
-                                    <Button1 label={project.name} className='mt-[1rem] mx-[1rem] mb-[0.3rem]' key={project.id}
+                    <Button1 label="Select Project" onClick={() => setModalOpen(true)} />
+                        <Modal title="Select Project" isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+                            {({ close }) => (
+                                <div className="flex flex-col">
+                                    <Button1 label="My Projects" className="mt-[1rem] mx-[1rem] mb-[0.3rem]"
                                         onClick={() => {
-                                            setSelectedProject(project);
-                                            console.log('Selected project:', project);
+                                            setSelectedProject(null);
                                             close();
                                         }}
                                     />
-                                ))}
-                            </div>
-                        )}
-                    </Modal>
+                                    {projects && projects.map(project => (
+                                        <Button1 label={project.name} className='mt-[1rem] mx-[1rem] mb-[0.3rem]' key={project.id}
+                                            onClick={() => {
+                                                setSelectedProject(project);
+                                                console.log('Selected project:', project);
+                                                close();
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </Modal>
                     {userProfile ? (
                         <div>
                             <p><strong>Name:</strong> {userProfile.users_detail.first_name} {userProfile.users_detail.last_name}</p>

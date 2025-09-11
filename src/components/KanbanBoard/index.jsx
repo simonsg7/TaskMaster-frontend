@@ -8,6 +8,8 @@ import FormCreateTask from '../FormCreateTask';
 import { getCardsData } from '../../utils/getCardsData';
 import deleteTask from '../../services/Tasks/deleteTasks';
 import { useMutation, useQueryClient } from 'react-query';
+import FormUpdateTask from '../FormUpdateTask';
+import Button1 from '../Button1';
 
 const getBorderClassByPriority = (priority) => {
     switch (priority?.toLowerCase()) {
@@ -55,8 +57,10 @@ const mapItemsToBoard = (items, title = '') => {
 };
 
 const KanbanBoard = ({ selectedProject, projects }) => {
-
     const [board, setBoard] = useState({ title: '', columns: [] });
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     useEffect(() => {
         console.log('Projects in KanbanBoard:', projects);
@@ -74,9 +78,23 @@ const KanbanBoard = ({ selectedProject, projects }) => {
     const queryClient = useQueryClient();
     const { mutate: deleteTaskMutate } = useMutation(deleteTask, { onSuccess: () => queryClient.invalidateQueries('projectsAndTasks') })
 
+    const openUpdateModal = (task) => {
+        setSelectedTask(task);
+        setIsUpdateModalOpen(true);
+    };
+
     return (
         <div className='h-full w-full p-4 overflow-auto'>
             <h1 className="text-center text-2xl mt-2">{board.title}</h1>
+
+            <Button1 label="Add Task" onClick={() => setIsCreateModalOpen(true)} />
+                <Modal title="Add Task" isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
+                    {
+                        ({ close }) => (
+                            <FormCreateTask selectedProject={selectedProject} close={close} />
+                        )
+                    }
+                </Modal>
 
             <DragDropContext onDragEnd={(result) => { handleDragEnd(result, setBoard) }}>
                 <div  className="flex justify-center mt-2">
@@ -102,10 +120,13 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                                                                     <p>{card.user}</p>
                                                                     <p>{card.description}</p>
                                                                     <hr />
-                                                                    <p>{card.category}</p>
+                                                                    <div className='flex justify-between'>
+                                                                        <p>{card.category}</p>
+                                                                        <button title='Edit Card' onClick={() => openUpdateModal(card)} className='pi pi-pencil text-[1rem] opacity-40'></button>
+                                                                    </div>
                                                                     <div className='flex justify-between items-center'>
                                                                         <div className='border border-gray-400 w-[50%] p-1 mt-[0.5rem]'><p>{card.expectation_date.split('T')[0]}</p></div>
-                                                                        <button title='Delete' onClick={() => deleteTaskMutate(card.id)} className='pi pi-trash text-[1.1rem] pt-5 opacity-40'></button>
+                                                                        <button title='Delete Card' onClick={() => deleteTaskMutate(card.id)} className='pi pi-trash text-[1.1rem] pt-5 opacity-40'></button>
                                                                     </div>
                                                                 </div>
                                                             )
@@ -123,11 +144,10 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                 </div>
             </DragDropContext>
 
-
-            <Modal title="Add Task" buttonName="Add Task">
+            <Modal title="Update Task" isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
                 {
                     ({ close }) => (
-                        <FormCreateTask selectedProject={selectedProject} close={close} />
+                        <FormUpdateTask selectedProject={selectedProject} close={close} task={selectedTask} />
                     )
                 }
             </Modal>
