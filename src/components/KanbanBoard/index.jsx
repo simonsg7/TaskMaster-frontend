@@ -14,11 +14,11 @@ import Button1 from '../Button1';
 const getBorderClassByPriority = (priority) => {
     switch (priority?.toLowerCase()) {
         case 'baja':
-            return 'border-green-500';
+            return 'border-green-400';
         case 'media':
-            return 'border-yellow-500';
+            return 'border-yellow-300';
         case 'alta':
-            return 'border-red-500';
+            return 'border-red-400';
     }
 };
 
@@ -84,20 +84,14 @@ const KanbanBoard = ({ selectedProject, projects }) => {
     };
 
     return (
-        <div className='h-full w-full p-4 overflow-auto'>
-            <h1 className="text-center text-2xl mt-2">{board.title}</h1>
-
-            <Button1 label="Add Task" onClick={() => setIsCreateModalOpen(true)} />
-                <Modal title="Add Task" isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
-                    {
-                        ({ close }) => (
-                            <FormCreateTask selectedProject={selectedProject} close={close} />
-                        )
-                    }
-                </Modal>
+        <div className='h-full w-full flex flex-col items-center p-4 overflow-auto'>
+            <div className='flex items-center justify-between h-[4rem] w-[53rem]'>
+                <h1 className="text-center text-[2.5rem] mt-2">{board.title}</h1>
+                <Button1 label="Add Card" onClick={() => setIsCreateModalOpen(true)} className={"mr-2 mt-[0.5rem]"} />
+            </div>
 
             <DragDropContext onDragEnd={(result) => { handleDragEnd(result, setBoard) }}>
-                <div  className="flex justify-center mt-2">
+                <div  className="flex justify-center">
                     {
                         board.columns.map(column => (
                             <Droppable key={column.id} droppableId={column.id}>
@@ -143,6 +137,14 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                     }
                 </div>
             </DragDropContext>
+
+            <Modal title="Add Task" isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
+                {
+                    ({ close }) => (
+                        <FormCreateTask selectedProject={selectedProject} close={close} />
+                    )
+                }
+            </Modal>
 
             <Modal title="Update Task" isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
                 {
