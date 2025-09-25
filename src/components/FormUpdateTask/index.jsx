@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { InputText } from 'primereact/inputtext';
@@ -6,13 +6,25 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useMutation, useQueryClient } from 'react-query';
 
-import { urlCreateTask } from '../../api/backendUrls';
+import { urlUpdateTask } from '../../api/backendUrls';
 import { handleApiErrors } from '../../api/handleApiErrors';
 import Button1 from '../Button1';
 
-const FormCreateTask = ({ selectedProject, close }) => {
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+const FormUpdateTask = ({ selectedProject, close, task }) => {
     const queryClient = useQueryClient();
+    
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+
+    useEffect(() => {
+        if (task) {
+            setValue('name', task.title);
+            setValue('description', task.description);
+            setValue('expectation_date', task.expectation_date.split('T')[0]);
+            setSelectedCategory(task.category);
+            setSelectedPriority(task.priority);
+            setSelectedState(task.state);
+        }
+    }, [task, setValue]);
 
     const [selectedCategory, setSelectedCategory] = useState(null);
     
@@ -56,7 +68,7 @@ const FormCreateTask = ({ selectedProject, close }) => {
                 project_id: selectedProject?.id,
             };
 
-            const response = await axios.post(urlCreateTask, payload, {
+            const response = await axios.put(urlUpdateTask(task.id), payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -69,7 +81,7 @@ const FormCreateTask = ({ selectedProject, close }) => {
             },
             onError: (error) => {
                 handleApiErrors(error);
-                console.error("Error creating task:", error.message);
+                console.error("Error updating task:", error.message);
             }
         }
     );
@@ -95,7 +107,7 @@ const FormCreateTask = ({ selectedProject, close }) => {
                     </div>
                     <div className='flex flex-col pt-2 pr-2 pl-2'>
                         <Dropdown value={selectedState} onChange={(e) => {setSelectedState(e.value); setValue('state', e.value);}} options={states} placeholder='Select State' className="w-[12rem] p-[0.3rem] border border-blue-300 hover:bg-bgInput" />
-                        <Button1 label="Crear" className='m-[1rem]' />
+                        <Button1 label="Actualizar" onClick={handleSubmit(onSubmit)} className='m-[1rem]' />
                     </div>
                 </div>
             </form>
@@ -103,4 +115,4 @@ const FormCreateTask = ({ selectedProject, close }) => {
     );
 }
 
-export default FormCreateTask;
+export default FormUpdateTask;

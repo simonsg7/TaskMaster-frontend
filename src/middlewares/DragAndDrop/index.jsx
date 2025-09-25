@@ -1,22 +1,23 @@
 import axios from 'axios';
-import { urlTaskById } from '../../api/backendUrls';
+import { urlUpdateTask, urlUpdateProject } from '../../api/backendUrls';
 
-const updateTaskState = async (taskId, newState) => {
+const updateTaskState = async (itemId, newState, type) => {
     try {
         const token = localStorage.getItem('token');
-        console.log(`Updating task ${taskId} state to ${newState}`);
+        console.log(`Updating ${type} ${itemId} state to ${newState}`);
 
-        await axios.put(urlTaskById(taskId), { state: newState }, {
+        const url = type === 'task' ? urlUpdateTask(itemId) : urlUpdateProject(itemId);
+        await axios.put(url, { state: newState }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
     } catch (error) {
-        console.error("Error updating task state:", error.message);
+        console.error(`Error updating ${type} state:`, error.message);
     }
 };
 
-const handleDragEnd = (result, setBoard) => {
+const handleDragEnd = (result, setBoard, type = 'task') => {
     const { source, destination } = result;
     if (!destination) {
         return;
@@ -28,7 +29,7 @@ const handleDragEnd = (result, setBoard) => {
     setBoard((prevBoard) => {
         const sourceColumn = prevBoard.columns.find(column => column.id === source.droppableId);
         const destinationColumn = prevBoard.columns.find(column => column.id === destination.droppableId);
-        const [movedTask] = sourceColumn.cards.splice(source.index, 1);
+        const [movedItem] = sourceColumn.cards.splice(source.index, 1);
 
         let newState;
         switch (destinationColumn.id) {
@@ -42,14 +43,14 @@ const handleDragEnd = (result, setBoard) => {
                 newState = 'completa';
                 break;
             default:
-                newState = movedTask.state;
+                newState = movedItem.state;
                 break;
         }
-        movedTask.state = newState;
+        movedItem.state = newState;
 
-        destinationColumn.cards.splice(destination.index, 0, movedTask);
+        destinationColumn.cards.splice(destination.index, 0, movedItem);
 
-        updateTaskState(movedTask.id, newState);
+        updateTaskState(movedItem.id, newState);
 
         return {
             ...prevBoard,

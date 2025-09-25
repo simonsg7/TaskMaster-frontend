@@ -1,33 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { useQuery } from 'react-query';
 
 import UserImage from '../UserImage';
 import handleDragEnd from '../../middlewares/DragAndDrop';
 import Modal from '../Modal';
 import FormCreateTask from '../FormCreateTask';
-import getProjectsAndTasks from '../../services/GetProjectsAndTasks';
 import { getCardsData } from '../../utils/getCardsData';
+import deleteTask from '../../services/Tasks/deleteTasks';
+import { useMutation, useQueryClient } from 'react-query';
+import FormUpdateTask from '../FormUpdateTask';
+import Button1 from '../Button1';
 
 const getBorderClassByPriority = (priority) => {
     switch (priority?.toLowerCase()) {
         case 'baja':
-            return 'border-green-500';
+            return 'border-green-400';
         case 'media':
-            return 'border-yellow-500';
+            return 'border-yellow-300';
         case 'alta':
-            return 'border-red-500';
+            return 'border-red-400';
     }
 };
 
-const mapItemsToBoard = (items, title = '') => {
+const mapItemsToBoard = (items, title = '', type = 'task') => {
     const columns = [
         { id: 'todo', title: 'To Do', cards: [] },
         { id: 'doing', title: 'Doing', cards: [] },
         { id: 'done', title: 'Done', cards: [] }
     ];
 
-    const cards = getCardsData(items);
+    const cards = getCardsData(items, type);
     cards.forEach(item => {
         let columnId;
         switch ((item.state || '').toLowerCase()) {
@@ -55,44 +57,41 @@ const mapItemsToBoard = (items, title = '') => {
 };
 
 const KanbanBoard = ({ selectedProject, projects }) => {
-    // const { data, isLoading, error } = useQuery({
-    //     queryKey: ['projectsAndTasks'],
-    //     queryFn: getProjectsAndTasks
-    // });
-
     const [board, setBoard] = useState({ title: '', columns: [] });
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     useEffect(() => {
-        // if (isLoading || error) return;
-        
-    //     if (selectedProject) {
-    //         setBoard(mapItemsToBoard(selectedProject.tasks, selectedProject.name));
-    //     } else if (data && data[0]?.projects) {
-    //         setBoard(mapItemsToBoard(data[0].projects, 'My Projects'));
-    //     }
-    // }, [data, selectedProject, isLoading, error]);    
-    
-        // if (isLoading) return <div>Loading...</div>;
-        // if (error) return <div>Error loading projects and tasks</div>;
-
         console.log('Projects in KanbanBoard:', projects);
         console.log('Selected project:', selectedProject);
         
         if (selectedProject) {
             console.log('Selected project tasks:', selectedProject.tasks);
-            setBoard(mapItemsToBoard(selectedProject.tasks, selectedProject.name));
+            setBoard(mapItemsToBoard(selectedProject.tasks, selectedProject.name, 'task'));
         } else if (projects) {
             console.log('Mapping projects to board:', projects);
-            setBoard(mapItemsToBoard(projects, 'My Projects'));
+            setBoard(mapItemsToBoard(projects, 'My Projects', 'project'));
         }
     }, [projects, selectedProject]);
 
-    return (
-        <div className='h-full w-full p-4 overflow-auto'>
-            <h1 className="text-center text-2xl mt-2">{board.title}</h1>
+    const queryClient = useQueryClient();
+    const { mutate: deleteTaskMutate } = useMutation(deleteTask, { onSuccess: () => queryClient.invalidateQueries('projectsAndTasks') })
 
-            <DragDropContext onDragEnd={(result) => { handleDragEnd(result, setBoard) }}>
-                <div  className="flex justify-center mt-2">
+    const openUpdateModal = (task) => {
+        setSelectedTask(task);
+        setIsUpdateModalOpen(true);
+    };
+
+    return (
+        <div className='h-full w-full flex flex-col items-center p-4 overflow-auto'>
+            <div className='flex items-center justify-between h-[4rem] w-[53rem]'>
+                <h1 className="text-center text-[2.5rem] mt-2">{board.title}</h1>
+                <Button1 label="Add Card" onClick={() => setIsCreateModalOpen(true)} className={"mr-2 mt-[0.5rem]"} />
+            </div>
+
+            <DragDropContext onDragEnd={(result) => { handleDragEnd(result, setBoard, selectedProject ? 'task' : 'project') }}>
+                <div  className="flex justify-center">
                     {
                         board.columns.map(column => (
                             <Droppable key={column.id} droppableId={column.id}>
@@ -106,18 +105,23 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                                                     <Draggable key={card.id} draggableId={card.id} index={index}>
                                                         {
                                                             (draggableProvided) => (
-                                                                <div {...draggableProvided.draggableProps} ref={draggableProvided.innerRef} {...draggableProvided.dragHandleProps} className={`h-auto w-[15rem] flex flex-col bg-white mb-2 p-2 border ${getBorderClassByPriority(card.priority)} rounded-lg shadow-md duration-200 hover:scale-105`}>
+                                                                <div {...draggableProvided.draggableProps} ref={draggableProvided.innerRef} {...draggableProvided.dragHandleProps} className={`h-auto w-[15rem] flex flex-col bg-white mb-2 p-2 border-[0.14rem] ${getBorderClassByPriority(card.priority)} rounded-lg shadow-md duration-200 hover:scale-105`}>
                                                                     <div className='flex justify-between'>
                                                                         <p className='font-bold'>{card.title}</p>
                                                                         <UserImage className='h-[2rem] w-[2rem] mb-[0.4rem]' />
                                                                     </div>
                                                                     <hr />
-                                                                    <p>{card.user}</p>
                                                                     <p>{card.description}</p>
                                                                     <hr />
-                                                                    <p>{card.category}</p>
-                                                                    {/* <p>{card.priority}</p> */}
-                                                                    <div className='border border-gray-400 w-[50%] p-1 mt-[0.5rem]'><p>{card.expectation_date.split('T')[0]}</p></div>
+                                                                    <p>{card.user}</p>
+                                                                    <div className='flex justify-between'>
+                                                                        <p>{card.category}</p>
+                                                                        <button title='Edit Card' onClick={() => openUpdateModal(card)} className='pi pi-pencil text-[1rem] opacity-40'></button>
+                                                                    </div>
+                                                                    <div className='flex justify-between items-center'>
+                                                                        <div className='border border-gray-400 w-[50%] p-1 mt-[0.5rem]'><p>{card.expectation_date.split('T')[0]}</p></div>
+                                                                        <button title='Delete Card' onClick={() => deleteTaskMutate(card.id)} className='pi pi-trash text-[1.1rem] pt-5 opacity-40'></button>
+                                                                    </div>
                                                                 </div>
                                                             )
                                                         }
@@ -134,11 +138,18 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                 </div>
             </DragDropContext>
 
-
-            <Modal title="Add Task" buttonName="Add Task">
+            <Modal title="Add Task" isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
                 {
                     ({ close }) => (
                         <FormCreateTask selectedProject={selectedProject} close={close} />
+                    )
+                }
+            </Modal>
+
+            <Modal title="Update Task" isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
+                {
+                    ({ close }) => (
+                        <FormUpdateTask selectedProject={selectedProject} close={close} task={selectedTask} />
                     )
                 }
             </Modal>

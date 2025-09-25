@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { urlProjectsByUserId } from '../../api/backendUrls';
+import { urlProjectsByUserId } from '../../../api/backendUrls';
 
 const getProjectsAndTasks = async () => {
     const token = localStorage.getItem('token');

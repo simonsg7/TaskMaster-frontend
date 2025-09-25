@@ -7,15 +7,13 @@ import { handleApiErrors } from '../../api/handleApiErrors';
 import UserImage from '../../components/UserImage';
 import KanbanBoard from '../../components/KanbanBoard';
 import Modal from '../../components/Modal';
-import getProjectsAndTasks from '../../services/GetProjectsAndTasks';
+import getProjectsAndTasks from '../../services/Projects/GetProjectsAndTasks';
 import Button1 from '../../components/Button1';
-// import UpdateUserImage from '../../components/UpdateUserImage';
 
 const UserProfile = () => {    
     const [userProfile, setUserProfile] = useState(null);
-    // const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
-    // const [loading, setLoading] = useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const { data } = useQuery('projectsAndTasks', getProjectsAndTasks);
 
@@ -24,7 +22,6 @@ const UserProfile = () => {
             try {
                 const token = localStorage.getItem('token');
                 const userId = localStorage.getItem('userId');
-                // const imageUrl = localStorage.getItem('imageUrl');
                 const urlProfile = urlMyProfile(userId);
                 
                 const response = await axios.get(urlProfile, {
@@ -43,33 +40,11 @@ const UserProfile = () => {
                 const errorResponse = handleApiErrors(error);
                 console.error("Error", errorResponse.message);
                 alert(errorResponse.message);
-                
-            // } finally {
-            //     setLoading(false);
             }
         };
 
-        // const fetchProjectsAndTasks = async () => {
-        //     try {
-        //         const data = await getProjectsAndTasks();
-        //         console.log('DATA DE API', data);
-        //         const userData = Array.isArray(data) ? data[0] : data;
-        //         console.log('USER DATA', userData);
-
-        //         setProjects(userData.projects || []);
-        //         console.log('Projects set in UserProfile:', userData.projects);
-        //     } catch (error) {
-        //         console.error('Error al obtener proyectos y tareas', error);
-        //     }
-        // };
-
         fetchUserProfile();
-        // fetchProjectsAndTasks();
     }, []);
-
-    // if (loading) {
-    //     return <div>Loading...</div>;
-    // }
 
     const projects = data ? (Array.isArray(data) ? data[0]?.projects : data.projects) : [];
 
@@ -88,27 +63,28 @@ const UserProfile = () => {
                 </div>
                 <div className='border border-purple-600 flex flex-1 flex-col items-center justify-center'>
                     <h2>My Profile!</h2>
-                    <Modal title="Select Project" buttonName="Select Project">
-                        {({ close }) => (
-                            <div className="flex flex-col">
-                                <Button1 label="My Projects" className="mt-[1rem] mx-[1rem] mb-[0.3rem]"
-                                    onClick={() => {
-                                        setSelectedProject(null);
-                                        close();
-                                    }}
-                                />
-                                {projects && projects.map(project => (
-                                    <Button1 label={project.name} className='mt-[1rem] mx-[1rem] mb-[0.3rem]' key={project.id}
+                    <Button1 label="Select Project" onClick={() => setModalOpen(true)} />
+                        <Modal title="Select Project" isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+                            {({ close }) => (
+                                <div className="flex flex-col">
+                                    <Button1 label="My Projects" className="mt-[1rem] mx-[1rem] mb-[0.3rem]"
                                         onClick={() => {
-                                            setSelectedProject(project);
-                                            console.log('Selected project:', project);
+                                            setSelectedProject(null);
                                             close();
                                         }}
                                     />
-                                ))}
-                            </div>
-                        )}
-                    </Modal>
+                                    {projects && projects.map(project => (
+                                        <Button1 label={project.name} className='mt-[1rem] mx-[1rem] mb-[0.3rem]' key={project.id}
+                                            onClick={() => {
+                                                setSelectedProject(project);
+                                                console.log('Selected project:', project);
+                                                close();
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </Modal>
                     {userProfile ? (
                         <div>
                             <p><strong>Name:</strong> {userProfile.users_detail.first_name} {userProfile.users_detail.last_name}</p>
