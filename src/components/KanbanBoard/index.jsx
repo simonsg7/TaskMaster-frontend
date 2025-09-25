@@ -22,14 +22,14 @@ const getBorderClassByPriority = (priority) => {
     }
 };
 
-const mapItemsToBoard = (items, title = '') => {
+const mapItemsToBoard = (items, title = '', type = 'task') => {
     const columns = [
         { id: 'todo', title: 'To Do', cards: [] },
         { id: 'doing', title: 'Doing', cards: [] },
         { id: 'done', title: 'Done', cards: [] }
     ];
 
-    const cards = getCardsData(items);
+    const cards = getCardsData(items, type);
     cards.forEach(item => {
         let columnId;
         switch ((item.state || '').toLowerCase()) {
@@ -68,10 +68,10 @@ const KanbanBoard = ({ selectedProject, projects }) => {
         
         if (selectedProject) {
             console.log('Selected project tasks:', selectedProject.tasks);
-            setBoard(mapItemsToBoard(selectedProject.tasks, selectedProject.name));
+            setBoard(mapItemsToBoard(selectedProject.tasks, selectedProject.name, 'task'));
         } else if (projects) {
             console.log('Mapping projects to board:', projects);
-            setBoard(mapItemsToBoard(projects, 'My Projects'));
+            setBoard(mapItemsToBoard(projects, 'My Projects', 'project'));
         }
     }, [projects, selectedProject]);
 
@@ -90,7 +90,7 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                 <Button1 label="Add Card" onClick={() => setIsCreateModalOpen(true)} className={"mr-2 mt-[0.5rem]"} />
             </div>
 
-            <DragDropContext onDragEnd={(result) => { handleDragEnd(result, setBoard) }}>
+            <DragDropContext onDragEnd={(result) => { handleDragEnd(result, setBoard, selectedProject ? 'task' : 'project') }}>
                 <div  className="flex justify-center">
                     {
                         board.columns.map(column => (
@@ -111,9 +111,9 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                                                                         <UserImage className='h-[2rem] w-[2rem] mb-[0.4rem]' />
                                                                     </div>
                                                                     <hr />
-                                                                    <p>{card.user}</p>
                                                                     <p>{card.description}</p>
                                                                     <hr />
+                                                                    <p>{card.user}</p>
                                                                     <div className='flex justify-between'>
                                                                         <p>{card.category}</p>
                                                                         <button title='Edit Card' onClick={() => openUpdateModal(card)} className='pi pi-pencil text-[1rem] opacity-40'></button>
