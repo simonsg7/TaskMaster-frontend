@@ -40,7 +40,7 @@ const FormCreateTask = ({ selectedProject, close }) => {
     const states = [
         { label: 'To Do', value: 'pendiente' },
         { label: 'Doing', value: 'en progreso' },
-        { label: 'Done', value: 'completa' },
+        { label: 'Done', value: 'completo' },
     ];
 
     const mutation = useMutation(

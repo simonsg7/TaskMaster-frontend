@@ -39,7 +39,7 @@ const mapItemsToBoard = (items, title = '', type = 'task') => {
             case 'en progreso':
                 columnId = 'doing';
                 break;
-            case 'completa':
+            case 'completo':
                 columnId = 'done';
                 break;
             default:
