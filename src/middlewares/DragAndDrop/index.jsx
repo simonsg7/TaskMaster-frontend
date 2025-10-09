@@ -50,7 +50,7 @@ const handleDragEnd = (result, setBoard, type = 'task') => {
 
         destinationColumn.cards.splice(destination.index, 0, movedItem);
 
-        updateTaskState(movedItem.id, newState);
+        updateTaskState(movedItem.id, newState, type);
 
         return {
             ...prevBoard,
