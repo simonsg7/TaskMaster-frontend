@@ -9,6 +9,7 @@ import { getCardsData } from '../../utils/getCardsData';
 import deleteTask from '../../services/Tasks/deleteTasks';
 import { useMutation, useQueryClient } from 'react-query';
 import FormUpdateTask from '../FormUpdateTask';
+import FormUpdateProject from '../FormUpdateProject';
 import Button1 from '../Button1';
 
 const getBorderClassByPriority = (priority) => {
@@ -58,9 +59,11 @@ const mapItemsToBoard = (items, title = '', type = 'task') => {
 
 const KanbanBoard = ({ selectedProject, projects }) => {
     const [board, setBoard] = useState({ title: '', columns: [] });
-    const [selectedTask, setSelectedTask] = useState(null);
+    const [selectedCard, setSelectedCard] = useState(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+    const isProjectView = !selectedProject;
 
     useEffect(() => {
         console.log('Projects in KanbanBoard:', projects);
@@ -76,10 +79,12 @@ const KanbanBoard = ({ selectedProject, projects }) => {
     }, [projects, selectedProject]);
 
     const queryClient = useQueryClient();
-    const { mutate: deleteTaskMutate } = useMutation(deleteTask, { onSuccess: () => queryClient.invalidateQueries('projectsAndTasks') })
+    const { mutate: deleteTaskMutate } = useMutation(deleteTask, {
+        onSuccess: () => queryClient.invalidateQueries('projectsAndTasks')
+    })
 
-    const openUpdateModal = (task) => {
-        setSelectedTask(task);
+    const openUpdateModal = (card) => {
+        setSelectedCard(card);
         setIsUpdateModalOpen(true);
     };
 
@@ -87,7 +92,7 @@ const KanbanBoard = ({ selectedProject, projects }) => {
         <div className='h-full w-full flex flex-col items-center p-4 overflow-auto'>
             <div className='flex items-center justify-between h-[4rem] w-[53rem]'>
                 <h1 className="text-center text-[2.5rem] mt-2">{board.title}</h1>
-                <Button1 label="Add Card" onClick={() => setIsCreateModalOpen(true)} className={"mr-2 mt-[0.5rem]"} />
+                <Button1 label={isProjectView ? "Add Project" : "Add Task"} onClick={() => setIsCreateModalOpen(true)} className={"mr-2 mt-[0.5rem]"} />
             </div>
 
             <DragDropContext onDragEnd={(result) => { handleDragEnd(result, setBoard, selectedProject ? 'task' : 'project') }}>
@@ -113,7 +118,7 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                                                                     <hr />
                                                                     <p>{card.description}</p>
                                                                     <hr />
-                                                                    <p>{card.user}</p>
+                                                                    <p>{isProjectView ? card.users : card.user}</p>
                                                                     <div className='flex justify-between'>
                                                                         <p>{card.category}</p>
                                                                         <button title='Edit Card' onClick={() => openUpdateModal(card)} className='pi pi-pencil text-[1rem] opacity-40'></button>
@@ -146,11 +151,15 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                 }
             </Modal>
 
-            <Modal title="Update Task" isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
+            <Modal title={isProjectView ? "Update Project" : "Update Task"} isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
                 {
-                    ({ close }) => (
-                        <FormUpdateTask selectedProject={selectedProject} close={close} task={selectedTask} />
-                    )
+                    ({ close }) => {
+                        if (isProjectView) {
+                            return <FormUpdateProject project={selectedCard} close={close} />;
+                        } else {
+                            return <FormUpdateTask selectedProject={selectedProject} close={close} task={selectedCard} />;
+                        }
+                    }
                 }
             </Modal>
         </div>
