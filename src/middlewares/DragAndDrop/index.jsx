@@ -40,7 +40,7 @@ const handleDragEnd = (result, setBoard, type = 'task') => {
                 newState = 'en progreso';
                 break;
             case 'done':
-                newState = 'completa';
+                newState = 'completo';
                 break;
             default:
                 newState = movedItem.state;
