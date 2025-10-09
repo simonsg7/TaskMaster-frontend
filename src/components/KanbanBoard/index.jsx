@@ -6,6 +6,7 @@ import handleDragEnd from '../../middlewares/DragAndDrop';
 import Modal from '../Modal';
 import { getCardsData } from '../../utils/getCardsData';
 import deleteTask from '../../services/Tasks/deleteTasks';
+import deleteProject from '../../services/Projects/deleteProjects';
 import { useMutation, useQueryClient } from 'react-query';
 import FormCreateTask from '../FormCreateTask';
 import FormCreateProject from '../FormCreateProject';
@@ -84,6 +85,10 @@ const KanbanBoard = ({ selectedProject, projects }) => {
         onSuccess: () => queryClient.invalidateQueries('projectsAndTasks')
     });
 
+    const { mutate: deleteProjectMutate } = useMutation(deleteProject, {
+        onSuccess: () => queryClient.invalidateQueries('projectsAndTasks')
+    });
+
     const openUpdateModal = (card) => {
         setSelectedCard(card);
         setIsUpdateModalOpen(true);
@@ -126,7 +131,7 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                                                                     </div>
                                                                     <div className='flex justify-between items-center'>
                                                                         <div className='border border-gray-400 w-[50%] p-1 mt-[0.5rem]'><p>{card.expectation_date.split('T')[0]}</p></div>
-                                                                        <button title='Delete Card' onClick={() => deleteTaskMutate(card.id)} className='pi pi-trash text-[1.1rem] pt-5 opacity-40'></button>
+                                                                        <button title='Delete Card' onClick={() => {isProjectView ? deleteProjectMutate(card.id) : deleteTaskMutate(card.id)}} className='pi pi-trash text-[1.1rem] pt-5 opacity-40'></button>
                                                                     </div>
                                                                 </div>
                                                             )
