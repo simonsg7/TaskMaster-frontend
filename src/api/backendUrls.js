@@ -11,3 +11,4 @@ export const urlCreateTask = `${baseUrl}/tasks/create`;
 export const urlDeleteTask = (taskId) => `${baseUrl}/tasks/delete/${taskId}`;
 export const urlUpdateTask = (taskId) => `${baseUrl}/tasks/update/${taskId}`;
 export const urlUpdateProject = (projectId) => `${baseUrl}/projects/update/${projectId}`;
+export const urlCreateProject = `${baseUrl}/projects/create`;

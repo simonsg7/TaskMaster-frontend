@@ -4,10 +4,11 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import UserImage from '../UserImage';
 import handleDragEnd from '../../middlewares/DragAndDrop';
 import Modal from '../Modal';
-import FormCreateTask from '../FormCreateTask';
 import { getCardsData } from '../../utils/getCardsData';
 import deleteTask from '../../services/Tasks/deleteTasks';
 import { useMutation, useQueryClient } from 'react-query';
+import FormCreateTask from '../FormCreateTask';
+import FormCreateProject from '../FormCreateProject';
 import FormUpdateTask from '../FormUpdateTask';
 import FormUpdateProject from '../FormUpdateProject';
 import Button1 from '../Button1';
@@ -81,7 +82,7 @@ const KanbanBoard = ({ selectedProject, projects }) => {
     const queryClient = useQueryClient();
     const { mutate: deleteTaskMutate } = useMutation(deleteTask, {
         onSuccess: () => queryClient.invalidateQueries('projectsAndTasks')
-    })
+    });
 
     const openUpdateModal = (card) => {
         setSelectedCard(card);
@@ -143,11 +144,15 @@ const KanbanBoard = ({ selectedProject, projects }) => {
                 </div>
             </DragDropContext>
 
-            <Modal title="Add Task" isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
+            <Modal title={isProjectView ? "Add Project" : "Add Task"} isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)}>
                 {
-                    ({ close }) => (
-                        <FormCreateTask selectedProject={selectedProject} close={close} />
-                    )
+                    ({ close }) => {
+                        if (isProjectView) {
+                            return <FormCreateProject close={close} />;
+                        } else {
+                            return <FormCreateTask selectedProject={selectedProject} close={close} />;  
+                        }
+                    }
                 }
             </Modal>
 
