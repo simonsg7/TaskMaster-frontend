@@ -55,16 +55,16 @@ const Login = () => {
                     </div>
 
                     <div className="w-[20rem] flex justify-around">
-                        <div>
+                        <div className="p-1">
                             <Button1 className="w-[7.5rem] mt-[0.5rem] mb-[1rem]" label="Login" /> 
                         </div>
-                        <div>
+                        <div className="p-1">
                             <Button1 className="w-[7.5rem] mt-[0.5rem] mb-[1rem]" label="Register" title="Don't you have an account?" onClick={() => setIsRegisterModalOpen(true)} />
                         </div>
                     </div>
                 </form>
             </div>
-            <Modal title="Register" isOpen={isRegisterModalOpen} onClose={() => setIsRegisterModalOpen(false)}>
+            <Modal title="New User" isOpen={isRegisterModalOpen} onClose={() => setIsRegisterModalOpen(false)}>
                 {({ close }) => (
                     <FormRegister close={close} />
                 )}
