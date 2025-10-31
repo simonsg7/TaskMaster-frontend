@@ -9,10 +9,15 @@ import UserProfile from "../pages/UserProfile";
 
 const router = createBrowserRouter([
     {
+        path: "/",
+        element: <Login />,
+    },
+
+    {
         element: <AdminLayout />,
         children: [
             {
-                path: "/",
+                path: "home",
                 element: <Home />
             },
             {
@@ -32,11 +37,6 @@ const router = createBrowserRouter([
                 element: <UserProfile />,
             },
         ],
-    },
-    
-    {
-        path: "login",
-        element: <Login />,
     },
 ]);
 

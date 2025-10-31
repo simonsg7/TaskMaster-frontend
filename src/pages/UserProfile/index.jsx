@@ -15,7 +15,10 @@ const UserProfile = () => {
     const [selectedProject, setSelectedProject] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
 
-    const { data } = useQuery('projectsAndTasks', getProjectsAndTasks);
+    // const { data } = useQuery('projectsAndTasks', getProjectsAndTasks);
+    const userId = localStorage.getItem('userId');
+
+    const { data } = useQuery(['projectsAndTasks', userId], () => getProjectsAndTasks(userId), { enabled: !!userId });
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -46,7 +49,11 @@ const UserProfile = () => {
         fetchUserProfile();
     }, []);
 
-    const projects = data ? (Array.isArray(data) ? data[0]?.projects : data.projects) : [];
+    const projects = data?.[0]?.projects || [];
+
+    // Console.log para depuración
+    console.log('Data from useQuery:', data);
+    console.log('Projects passed to KanbanBoard:', projects);
 
     useEffect(() => {
         if (selectedProject && projects.length > 0) {

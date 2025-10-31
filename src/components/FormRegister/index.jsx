@@ -47,7 +47,7 @@ const FormRegister = ({ close }) => {
             onSuccess: (data) => {
                 console.log("Registro exitoso:", data);
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("userId", data.response.id);
+                localStorage.setItem("userId", data.user.id);
                 localStorage.setItem("userDetailId", data.user_detail_id);
                 localStorage.setItem("imageUrl", data.imageUrl);
 
@@ -92,64 +92,6 @@ const FormRegister = ({ close }) => {
                 </div>
             </form>
         </>
-        // <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col items-center justify-center p-4 gap-4'>
-        //     <div className='flex gap-4'>
-        //         <Controller name="first_name" control={control} rules={{ required: 'El nombre es requerido.' }} render={({ field, fieldState }) => (
-        //             <div className="flex flex-col">
-        //                 <InputText {...field} placeholder="Nombre" className={classNames({ 'p-invalid': fieldState.error })} />
-        //                 {getFormErrorMessage(field.name)}
-        //             </div>
-        //         )} />
-        //         <Controller name="last_name" control={control} rules={{ required: 'El apellido es requerido.' }} render={({ field, fieldState }) => (
-        //             <div className="flex flex-col">
-        //                 <InputText {...field} placeholder="Apellido" className={classNames({ 'p-invalid': fieldState.error })} />
-        //                 {getFormErrorMessage(field.name)}
-        //             </div>
-        //         )} />
-        //     </div>
-        //     <Controller name="email" control={control} rules={{ required: 'El email es requerido.', pattern: { value: /^\S+@\S+$/i, message: 'Email inválido.' } }} render={({ field, fieldState }) => (
-        //         <div className="flex flex-col w-full">
-        //             <InputText {...field} placeholder="Email" className={classNames({ 'p-invalid': fieldState.error }, 'w-full')} />
-        //             {getFormErrorMessage(field.name)}
-        //         </div>
-        //     )} />
-        //     <div className='flex gap-4'>
-        //         <Controller name="password" control={control} rules={{ required: 'La contraseña es requerida.' }} render={({ field, fieldState }) => (
-        //             <div className="flex flex-col">
-        //                 <Password {...field} placeholder="Contraseña" feedback={false} toggleMask className={classNames({ 'p-invalid': fieldState.error })} />
-        //                 {getFormErrorMessage(field.name)}
-        //             </div>
-        //         )} />
-        //         <Controller name="password_confirmation" control={control} rules={{ required: 'Confirme la contraseña.', validate: value => value === password || 'Las contraseñas no coinciden.' }} render={({ field, fieldState }) => (
-        //             <div className="flex flex-col">
-        //                 <Password {...field} placeholder="Confirmar Contraseña" feedback={false} toggleMask className={classNames({ 'p-invalid': fieldState.error })} />
-        //                 {getFormErrorMessage(field.name)}
-        //             </div>
-        //         )} />
-        //     </div>
-        //     <div className='flex gap-4'>
-        //         <Controller name="document_type" control={control} rules={{ required: 'Seleccione un tipo.' }} render={({ field, fieldState }) => (
-        //             <div className="flex flex-col">
-        //                 <Dropdown {...field} options={typeDocument} placeholder="Tipo Doc." className={classNames({ 'p-invalid': fieldState.error })} />
-        //                 {getFormErrorMessage(field.name)}
-        //             </div>
-        //         )} />
-        //         <Controller name="document_number" control={control} rules={{ required: 'El documento es requerido.' }} render={({ field, fieldState }) => (
-        //             <div className="flex flex-col">
-        //                 <InputText {...field} placeholder="N° Documento" keyfilter="int" className={classNames({ 'p-invalid': fieldState.error })} />
-        //                 {getFormErrorMessage(field.name)}
-        //             </div>
-        //         )} />
-        //     </div>
-        //     <Controller name="phone_number" control={control} rules={{ required: 'El teléfono es requerido.' }} render={({ field, fieldState }) => (
-        //         <div className="flex flex-col w-full">
-        //             <InputText {...field} placeholder="Teléfono" keyfilter="int" className={classNames({ 'p-invalid': fieldState.error }, 'w-full')} />
-        //             {getFormErrorMessage(field.name)}
-        //         </div>
-        //     )} />
-
-        //     <Button1 label="Registrarse" type="submit" className='m-[1rem]' loading={mutation.isLoading} />
-        // </form>
     );
 };
 

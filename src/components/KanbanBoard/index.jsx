@@ -60,6 +60,8 @@ const mapItemsToBoard = (items, title = '', type = 'task') => {
 };
 
 const KanbanBoard = ({ selectedProject, projects }) => {
+    console.log('KanbanBoard received props:', { selectedProject, projects });
+
     const [board, setBoard] = useState({ title: '', columns: [] });
     const [selectedCard, setSelectedCard] = useState(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
