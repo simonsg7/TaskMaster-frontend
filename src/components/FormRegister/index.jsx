@@ -47,7 +47,7 @@ const FormRegister = ({ close }) => {
             onSuccess: (data) => {
                 console.log("Registro exitoso:", data);
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("userId", data.user.id);
+                localStorage.setItem("userId", data.response.id);
                 localStorage.setItem("userDetailId", data.user_detail_id);
                 localStorage.setItem("imageUrl", data.imageUrl);
 
