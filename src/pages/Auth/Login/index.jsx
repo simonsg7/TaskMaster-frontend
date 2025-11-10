@@ -44,13 +44,13 @@ const Login = () => {
                         <div className="p-2">
                             <InputText {...register("email", { required: true })} type="email" className="p-[0.3rem] border border-blue-300 hover:bg-bgInput" placeholder="Email" />
                             <br />
-                            {errors.email && (<span className="text-[0.85rem]">Is required</span>)}
+                            {errors.email && (<span className="text-[0.85rem]">This is required</span>)}
                         </div>
 
                         <div className="p-2">
                             <InputText {...register("password", { required: true })} type="password" className="p-[0.3rem] border border-blue-300 hover:bg-bgInput" placeholder="Password" />
                             <br />
-                            {errors.password && (<span className="text-[0.85rem]">Is required</span>)}
+                            {errors.password && (<span className="text-[0.85rem]">This is required</span>)}
                         </div>
                     </div>
 
